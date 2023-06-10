@@ -1,0 +1,196 @@
+---
+title: "Classification"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+
+
+### Name: Gabriel Bentley
+### Date: 9/13/22
+### Dataset: Housing
+### [https://www.kaggle.com/code/ryanholbrook/binary-classification/data?select=housing.csv](https://www.kaggle.com/code/ryanholbrook/binary-classification/data?select=housing.csv)
+
+## How does linear Classification work?
+Logistic regression involves picking a qualitiative target variable and creating a model that will predict the class of the target variable. The linear model for classification will create a decision boundary and use it to seperate the different classes. All observations that land on one side of the boundary will be predicted as one class and the observations that land on the other side will be predicted as the other class.
+
+
+## Import the data field and seperate it into train and test sets
+We will read in the housing data field, modify the House age column to be usable for classificiation by giving houses that are 30 years or older the value of 1 and houses that are less then 30 years old the value of 0. Next we factor the target column HouseAge and divide it into train and test sets.
+```{r}
+df <- read.csv("housing.csv")
+
+X <- vector(mode="integer", length=nrow(df))
+count <- 1
+
+for (i in df$HouseAge) {
+  
+  if(i >= 30){
+    X[count] <- 1
+  }
+  else{
+    X[count] <- 0
+  }
+  count <- count + 1
+  
+}
+
+df$HouseAge <- as.factor(X)
+
+
+set.seed(4689)
+i <- sample(1:nrow(df), nrow(df)*0.80, replace=FALSE)
+train <- df[i,]
+test <- df[-i,]
+
+```
+
+## Explore the training data
+Here we will explore the data to get a better idea of what we are working with, we will str the data, get a summary of the columns, show the first few observations of the data field, output the names of the columns, and show how many observations have N/A values.
+```{r}
+str(train)
+summary(train)
+head(train)
+names(train)
+colSums(is.na(train))
+
+```
+
+
+## Create graphs
+Here we create two sets of graphs to further observe the housing data set. The first two graphs plot House age against average income, and House Age against the average house value. The second set of graphs are cdplots and they compare House age against population, and average house value respectivly. When preforming a cdplot against population the resulting graph was unreadable, so I increased the bandwith until an acceptable result was shown.
+```{r}
+
+par(mfrow=c(1,2))
+plot(train$HouseAge, train$MedInc, data=train, main="Med Inc",
+    varwidth=TRUE)
+plot(train$HouseAge, train$MedHouseVal, data=train, main="Med House Val", varwidth=TRUE)
+
+par(mfrow=c(1,2))
+cdplot(train$HouseAge~train$Population, bw = 1400)
+cdplot(train$HouseAge~train$MedHouseVal)
+```
+
+## Build a logistic regression model
+Here we create the logistic regression model for predicting if the house age is greater than or equal to 30, or less than 30 year old.
+```{r}
+glm1 <- glm(train$HouseAge~., data = train, family = binomial)
+summary(glm1)
+
+glm2 <- glm(train$HouseAge~train$Population, data = train, family = binomial)
+summary(glm2)
+
+glm3 <-glm(train$HouseAge~train$MedHouseVal + train$MedInc, data = train, family = binomial)
+summary(glm3)
+```
+What the summary tells us is 
+The first general linear model is the best one of the three. Based off of the p value for each of the columns they seem to be good predictors for the house age. The Residual deviance is lower than the the Null deviance by around 3500 values, which is is a much better value than the other models. Finally the AIC for the first model which uses all columns is the lowest of the three models making the first glm the best logistical regression model.
+
+
+## Build a naive Bayes model
+Here we build a naive Bayes model for classification of HouseAge
+```{r}
+library(e1071)
+nb1 <- naiveBayes(HouseAge~., data=train)
+nb1
+```
+Here we see the naive Bayes model for HouseAge with all the other columns of the data fields as parameters. In A-priori probabilties we see that the model has the value of .515 for the house age to be less than 30 years old and the likelyhood of the house being 30 years or older is .485. So the likelyhood of either option is roughly random. Since all the predictors are quantitiative the model gives us the standard deviation and mean for each class and the predictor.
+
+## Using these two classification models models, predict and evaluate on the test data using all of the classification metrics discussed in class. Compare the results and indicate why you think these results happened. 
+Here we predict the models and find the accuracy of both models
+```{r}
+probs1 <- predict(glm1, newdata = test, type = "response")
+pred1 <- ifelse(probs1>0.5, 1, 0)
+acc1 <- mean(pred1==test$HouseAge)
+print(paste("Logistic Regression Accuracy = ", acc1))
+table(pred1, test$HouseAge)
+
+pred2 <- predict(nb1, newdata = test, type = "class")
+acc2 <- mean(pred2==test$HouseAge)
+print(paste("Naive Bayes Accuracy = ", acc2))
+table(pred2, test$HouseAge)
+
+```
+This shows that the logistic regression model is much more accurate when compared to the naive Bayes model which is basically random when predicting the class in the test data field.
+
+
+## Find sensitivity and specificity, and Kappa for the two models using confusion matrix.
+Here we construct a confusion matrix for both models and use those matrixes to output the sensitivity, specificity, and Kappa values for both models
+```{r}
+library(caret)
+library(ggplot2)
+cm1 <- confusionMatrix(test$HouseAge, as.factor(pred1))
+
+cat("Logistic regression \nSensitivity value: ", cm1$byClass['Sensitivity'], "\nSpecificity: ", cm1$byClass['Specificity'], "\nKappa: ",cm1$overall['Kappa'])
+
+cm2 <- confusionMatrix(test$HouseAge, pred2)
+
+cat("\n\nNaive Bayes \nSensitivity value: ", cm2$byClass['Sensitivity'], "\nSpecificity: ", cm2$byClass['Specificity'], "\nKappa: ",cm2$overall['Kappa'])
+
+```
+For the Logistic regression model the true positive rate is about .74 which means that the model has a 74% chance of positivly identifying a house as being 30 years or older when it actually is, and the model has a true negative rate of about .69 which means that the model has a 69% chance of positivly identifying a house as being less than 30 years old when it is. The Kappa value for the logistic regression is about 0.43 which means that there is a moderate agreement between the data being modeled.
+For the naive Bayes model the true positive rate is about .52 and the true negative rate is about .45 which means that the model is basicly guessing randomly. The kappa value is almost 0 meaning that for the model there is no agreement between the data.
+
+## Show the ROC and find the AUC under the curve of ROC for both the logistic regression model and the naive Bayes model
+Here we show the ROC for both models and output the area under the curve for each ROC.
+```{r}
+library(ROCR)
+p1 <- predict(glm1, newdata = test, type = "response")
+pr1 <- prediction(p1, test$HouseAge)
+
+prf1 <- performance(pr1, measure = "tpr", x.measure = "fpr")
+plot(prf1)
+
+auc1 <- performance(pr1, measure = "auc")
+auc1 <- auc1@y.values[[1]]
+
+cat("Area under logistic regression ROC is : ", auc1)
+
+p2 <- predict(nb1, newdata = test, type = "class")
+
+pr2 <- prediction(as.numeric(p2), as.numeric(test$HouseAge))
+
+prf2 <- performance(pr2, measure = "tpr", x.measure = "fpr")
+plot(prf2)
+
+auc2 <- performance(pr2, measure = "auc")
+auc2 <- auc2@y.values[[1]]
+
+cat("\nArea under naive Bayes ROC is : ", auc2)
+```
+What this means 
+1. the Logistic Regression is doing pretty good
+2. the naive Bayes is preforming randomly
+
+## Find the MCC for both models
+Here we will find the Mathew correlation coefficient
+```{r}
+library(mccr)
+cat("The Logistic regression MCC is", mccr(test$HouseAge, pred1), "\nThe naive Bayes MCC is", mccr(test$HouseAge, pred2))
+
+
+
+
+```
+
+The reason for the random output of the naive Bayes model on the given data field is most likely do to some of the disadvantages of the naive Bayes model. Since the naive Bayes model gives equal importance to all predictors it could be that most of the predictors in the data field have little correlation with the target column. Additionally naive Bayes works better with smaller data sets it could be that a dataset of over 10,000 values was large enough to decrease its effectiveness. And finally when faced with values in the test set that were not in the training set the naive Bayes model guesses randomly.
+
+## Compare the the strengths and weaknesses of naive Bayes and logistic regression.
+The strengths of the Logistic regression method are that it can separate different classes well if they can be seperated linearly, it is relatively inexpensive to perform a logistic regression computation, and a logistic regression gives a nice probabilistic output. The strengths of the naive Bayes method are its ability to work well with small sets of data, the ease at which it can be implemented, the easy interpretation of its output, and its ability to handle high dimensions well.
+
+The weakness of the logistic regression model is that it is prone to under fitting the data making the model inflexible. The weakness of the naive Bayes model is its underpreformance with large data sets and it's naive assumption that all the predictors in the data set are independent from each other. Additionally when the naive Bayes model encounters values in the test set that were not in the data set it guesses randomly.
+
+
+## List the benefits and drawbacks of each classification metric, and describe what each metric tells us.
+
+Accuracy: Tells us the rate of correct predictions over number of test observations, it has the advantage of being simple and easy to calculate and is the most common classification metric used. The weakness of accuracy is that it is not a good measurement on imbalanced data sets.
+
+Sensitivity and Specificity: Tells us the true positive rate and the true negative rate of the model which means the amount the model guesses a class and it was acctually that class and the amount it does not guess that class and it was not that class. The benefit of this classification method is that it shows if a class could have been misclassified, and the weakness is that there is a tradeoff between sensitivty and specificity where when one increases the other decreases.  
+
+Kappa: Tells us the amount of agreement between the predictors two annotators in a data set and adjusts the accuracy of the dataset to account for prediction by random chance. It is found by subtracting the probability of the expected agreement from the probability of the actual agreement and dividing that by 1 - the expected agreement probability. The benefit of Kappa is that it can provide a more comprehensive and objective description of the models performance in addition it can handle imbalanced data sets and multi-class problems. The detriment of the Kappa model is that it makes assumptions about the data that could be wrong in reality leading to an incorrect evaluation of the model.
+
+ROC and AUC: ROC tells us the tradeoff between predicing true valeu rates and false value rates in the form of a graph with a curve on it. AUC tells us teh area under a ROC curve and gives us an indication on how good the model is as a classifier with 0.5 being random, and 1 being perfect. The benefit of ROC and AUC is that it can show people the cutoff values for the data by looking at where the curve bends. the detrement of ROC and AUC is that if the dataset is unbalanced a small number of correct or incorrect guesses by the model can dramatically change the shape of the curve giving the user a false assumption about the data.
+
+MCC: Tells is another form of accuracy but unlike accuracy it takes into account the differences in class distribution. The disadvantage of MCC as a classification metric is that it can only be used for binary classification.
+

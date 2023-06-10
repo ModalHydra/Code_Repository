@@ -1,0 +1,137 @@
+---
+title: "Regression"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+### Name: Gabriel Bentley
+### Date: 9/13/22
+### Dataset: Summary of Weather Conditions in WWII
+### [https://www.kaggle.com/datasets/smid80/weatherww2?resource=download](https://www.kaggle.com/datasets/smid80/weatherww2?resource=download)
+
+## How does linear regression work?
+Linear regression works by attempting to predict target quantitative values y with a set of perdictor values x of a data set. A linear line will be drawn through the data set values with a slope and intercept to show the relationship between the y and x values. Linear regression has the advantage of being simple and easy to use, but tends to have a high bias on its results.
+
+## Import the data field and seperate it into train and test sets
+We will only use the MaxTemp, MinTemp, MeanTemp, year, month, and day columns of the data set.
+```{r}
+df <- read.csv("Weather.csv")
+
+keeps <- c("MaxTemp","MinTemp", "MeanTemp", "YR", "MO", "DA")
+df <- df[keeps]
+
+set.seed(1234)
+i <- sample(1:nrow(df), nrow(df)*0.80, replace=FALSE)
+train <- df[i,]
+test <- df[-i,]
+
+```
+
+## Explore the training data
+Here we use the str, summary, head, names, and colSum(is.na(train)) function calls to explore the train data field.
+```{r}
+str(train)
+summary(train)
+head(train)
+names(train)
+colSums(is.na(train))
+
+```
+
+
+## Create graphs
+Here we plot the max temp against the min temp and we plot the year against the max temp, and we plot the month against the max temp
+```{r}
+plot(train$MaxTemp~train$MinTemp, xlab="Min Temp", ylab="Max Temp", cex=0.5)
+par(mfrow=c(1,2))
+plot(train$YR, train$MaxTemp,
+     xlab="Year", ylab="MaxTemp")
+plot(train$MO, train$MaxTemp,
+     xlab="Month", ylab="MaxTemp")
+par(mfrow=c(1,1))
+```
+
+## Build a one predicter linear regression model
+Here we build a one predicter linear regression model and plot the residuals 
+```{r}
+lm1 <- lm(MaxTemp~MinTemp, data = train)
+summary(lm1)
+
+par(mfrow=c(2,2))
+plot(lm1)
+par(mfrow=c(1,1))
+```
+What the summary tells us is that MinTemp is a good predictor for MaxTemp due to the 3 asterisks next to it and its low p-value and that the model is well fitted because the R-squared value is relatively close to 1. 0.77 is an ok R-squared value, but it would be better for it to be closer to 1. The low p-value and higher R-value prove that the model is good. The residual standard error was 4.157, which means that the estimated value would only be off by about 4 degrees. The F-statistic is huge, indicating that MinTemp and MaxTemp are very closely related to each other.
+
+Plot 1: Since the red line is pretty horizontal and is closely following the dashed line, the plot shows that there is little variation not captured by the model
+
+Plot 2: The residuals of the data are normally distributed due to them following the straight line diagonally
+
+Plot 3: The red line is fairly horizontal with only a slight turn in it near the end, and the data points are spread out around the line equally except for a few outliers. This means that the model is mostly homoscedastic.
+
+Plot 4: This plot shows that there are no leverage points affecting the model due to the spread out x values for the data points, but there are a few outliers in the data set affecting the model, as shown by the unusual y values at the beginning and middle of the plot.
+
+
+
+## Build a multiple linear regression model
+Here we build a multiple linear regression model and plot the residuals
+```{r}
+lm2 <- lm(MaxTemp ~ MinTemp+MO, data=train)
+summary(lm2)
+
+par(mfrow=c(2,2))
+plot(lm2)
+par(mfrow=c(1,1))
+```
+
+## Build a third and fourth linear regression model
+Here we build a third and fourth linear regression model and plot their residuals
+```{r}
+lm3 <- lm(MaxTemp ~ MinTemp + MO*YR*DA, data = train)
+summary(lm3)
+
+par(mfrow=c(2,2))
+plot(lm3)
+par(mfrow=c(1,1))
+
+lm4 <- lm(MaxTemp ~ MO, data = train)
+summary(lm4)
+
+par(mfrow=c(2,2))
+plot(lm4)
+par(mfrow=c(1,1))
+```
+
+## Predict and evaluate on the test data using metrics correlation and  mse. Compare the results and indicate why you think these results happened. 
+Here we predict the moduels on the test data field and compare the results with the other data sets.
+```{r}
+pred1 <- predict(lm1, newdata = test)
+correlation1 <- cor(pred1, test$MaxTemp)
+mse1 <- mean((pred1 - test$MaxTemp)^2)
+rmse1 <- sqrt(mse1)
+print(paste("lm1 Correlation: ", correlation1, "lm1 Mean Square Error: ", mse1, "lm1 Root Mean Square Error: ", rmse1))
+
+
+pred2 <- predict(lm2, newdata = test)
+correlation2 <- cor(pred2, test$MaxTemp)
+mse2 <- mean((pred2 - test$MaxTemp)^2)
+rmse2 <- sqrt(mse2)
+print(paste("lm2 Correlation: ", correlation2, "lm2 Mean Square Error: ", mse2, "lm2 Root Mean Square Error: ", rmse2))
+
+pred3 <- predict(lm3, newdata = test)
+correlation3 <- cor(pred3, test$MaxTemp)
+mse3 <- mean((pred3 - test$MaxTemp)^2)
+rmse3 <- sqrt(mse3)
+print(paste("lm3 Correlation: ", correlation3, "lm3 Mean Square Error: ", mse3, "lm3 Root Mean Square Error: ", rmse3))
+
+pred4 <- predict(lm4, newdata = test)
+correlation4 <- cor(pred4, test$MaxTemp)
+mse4 <- mean((pred4 - test$MaxTemp)^2)
+rmse4 <- sqrt(mse4)
+print(paste("lm4 Correlation: ", correlation4, "lm4 Mean Square Error: ", mse4, "lm4 Root Mean Square Error: ", rmse4))
+
+
+```
+Comparing the results of the correlations we can see that the first three models have roughly the same correlation of around .87, while the last model lm4 has a very low correlation. Additionally lm4 has a much higher mean square error than the other three models. The most likely reason for this is the use of MinTemp as a parameter in the first for models and the absence of it the the last one. From this we can conclude that the most important parameter when it comes to predicting MaxTemp from the data set is the MinTemp.
+
