@@ -1,8 +1,11 @@
+import SideBar from "../../Components/taskManagerComponents/SideBar";
+
 export default function TaskManagerHomer(){
 
     return(
         <div>
-             <h1>General Task Manager</h1>
+             
+             <SideBar/>
         </div>
     );
 
