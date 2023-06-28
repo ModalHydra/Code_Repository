@@ -1,6 +1,41 @@
-var od = 0;
+import { useNavigate } from "react-router-dom";
 
+var od = 0;
 export default function SideBar(){
+
+    let navigate = useNavigate();
+
+    const goHome = () =>{
+        let path = '/Home';
+        navigate(path);
+
+    }
+
+    const goOverdue = () =>{
+        let path = '/Overdue';
+        navigate(path);
+
+    }
+
+    const goCalendar = () =>{
+        let path = '/Calendar';
+        navigate(path);
+
+    }
+
+    const goAbout = () =>{
+        let path = '/About';
+        navigate(path);
+
+    }
+
+    const goManage = () =>{
+        let path = '/Editor';
+        navigate(path);
+
+    }
+
+
     return(
         <>
 
@@ -51,19 +86,19 @@ export default function SideBar(){
             <p id = "sideBarHeader">
                 General Task Manager
             </p>
-            <button id = "homeButton">
+            <button id = "homeButton" onClick = {goHome}>
                 Home
             </button>
-            <button id = "manageButton">
+            <button id = "manageButton" onClick = {goManage}>
                 Manage Tasks
             </button>
-            <button id = "overdueButton">
+            <button id = "overdueButton" onClick = {goOverdue}>
                 Overdue Tasks
             </button>
-            <button id = "calendarButton">
+            <button id = "calendarButton" onClick = {goCalendar}>
                 Calendar View
             </button>
-            <button id = "aboutButton">
+            <button id = "aboutButton" onClick = {goAbout}>
                 About
             </button>
 

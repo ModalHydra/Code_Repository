@@ -3,6 +3,10 @@ import './App.css';
 import { BrowserRouter, Routes, Route} from 'react-router-dom';
 import TicTacToe from './Pages/ticTacToe';
 import TaskManagerHome from './Pages/taskManagerPages/taskManagerHome';
+import TaskManagerAbout from './Pages/taskManagerPages/taskManagerAbout';
+import TaskManagerCalendar from './Pages/taskManagerPages/taskManagerCalendar';
+import TaskManagerOverdue from './Pages/taskManagerPages/taskManagerOverdue';
+import TaskManagerEditor from './Pages/taskManagerPages/taskManagerTaskEditor';
 
 /*
 function App() {
@@ -34,6 +38,10 @@ function App() {
       <Routes>
         <Route path = "/" element = {<TicTacToe/>}/>
         <Route path = "/Home" element = {<TaskManagerHome/>}/>
+        <Route path = "/About" element = {<TaskManagerAbout/>}/>
+        <Route path = "/Calendar" element = {<TaskManagerCalendar/>}/>
+        <Route path = "/Editor" element = {<TaskManagerEditor/>}/>
+        <Route path = "/Overdue" element = {<TaskManagerOverdue/>}/>
       </Routes>    
     </BrowserRouter>
     </>

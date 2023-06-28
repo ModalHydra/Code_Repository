@@ -1,12 +1,12 @@
 import SideBar from "../../Components/taskManagerComponents/SideBar";
 
-export default function TaskManagerCalendar(){
+export default function TaskManagerAbout(){
 
     return(
         <div>
             <style>
                 {`
-                    #calendarTitle{
+                    #aboutTitle{
                         width: 85%;
                         font-size: 90pt;
                         text-align: center;
@@ -19,8 +19,8 @@ export default function TaskManagerCalendar(){
            
              
              <SideBar/>
-             <div id = "calendarTitle">
-                    Calendar
+             <div id = "aboutTitle">
+                    About
              </div>
              
         </div>
