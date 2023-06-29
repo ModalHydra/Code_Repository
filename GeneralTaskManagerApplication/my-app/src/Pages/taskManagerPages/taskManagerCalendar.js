@@ -1,4 +1,5 @@
 import SideBar from "../../Components/taskManagerComponents/SideBar";
+import Calendar from "../../Components/taskManagerComponents/Calendar";
 
 export default function TaskManagerCalendar(){
 
@@ -7,10 +8,17 @@ export default function TaskManagerCalendar(){
             <style>
                 {`
                     #calendarTitle{
-                        width: 85%;
-                        font-size: 90pt;
+                        width: 84%;
+                        font-size: 70pt;
                         text-align: center;
                         float: right;
+                    }
+
+                    #calendarBody{
+                        width: 84%;
+                        float: right;
+                        height: 80vh;
+                        
                     }
                 
                 
@@ -19,8 +27,13 @@ export default function TaskManagerCalendar(){
            
              
              <SideBar/>
-             <div id = "calendarTitle">
-                    Calendar
+             <h1 id = "calendarTitle">
+                        Calendar
+            </h1>
+             <div id = "calendarBody">
+                
+             
+                <Calendar/>
              </div>
              
         </div>
