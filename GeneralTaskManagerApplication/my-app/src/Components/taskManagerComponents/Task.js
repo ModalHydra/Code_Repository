@@ -5,9 +5,6 @@ export default function Task(){
             <style>
             {`
                 #taskItem{
-
-                    background: green;
-                    width: 80%;
                     display: table-row;
                 }
 

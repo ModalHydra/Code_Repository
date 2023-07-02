@@ -26,11 +26,13 @@ export default function TaskManagerHomer(){
                     }
 
                     #taskList{
+                        width: 1000pt;
                         
                     }
 
                     li.task{
                         margin: 5px;
+                        width: 1000pt;
                     }
                 
                 
@@ -43,6 +45,7 @@ export default function TaskManagerHomer(){
                     To Do...
                     <br/>
              </div>
+             
              <div id = "taskHolder">
                 <ol id = "taskList">
                     <li class = "task">
