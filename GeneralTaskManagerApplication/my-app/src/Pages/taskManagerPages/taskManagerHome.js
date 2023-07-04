@@ -41,10 +41,10 @@ export default function TaskManagerHomer(){
            
              
              <SideBar/>
-             <div id = "homeTitle">
+             <h1 id = "homeTitle">
                     To Do...
                     <br/>
-             </div>
+             </h1>
              
              <div id = "taskHolder">
                 <ol id = "taskList">

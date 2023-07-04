@@ -1,6 +1,9 @@
 import SideBar from "../../Components/taskManagerComponents/SideBar";
+//import Cookies from 'js-cookie';
 
 export default function TaskManagerOverdue(){
+
+    
 
     return(
         <div>
@@ -8,7 +11,7 @@ export default function TaskManagerOverdue(){
                 {`
                     #overdueTitle{
                         width: 85%;
-                        font-size: 90pt;
+                        font-size: 70pt;
                         text-align: center;
                         float: right;
                     }
@@ -19,9 +22,9 @@ export default function TaskManagerOverdue(){
            
              
              <SideBar/>
-             <div id = "overdueTitle">
+             <h1 id = "overdueTitle">
                     Overdue
-             </div>
+             </h1>
              
         </div>
     );
