@@ -10,14 +10,11 @@ export default function Task(){
 
                 .taskCell{
                     background: #FF8585;
-                    width: 20%;
+                    width: 10%;
                     display: table-cell;
                     border: solid 1px;
                     margin: auto;
                 }
-
-                
-
                 
                 }
             

@@ -1,0 +1,72 @@
+#sideBarBody {
+    background: #FF8484;
+    width: 15%;
+    height: 100vh;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+    position: fixed;
+    border: solid 2px;
+    left: 0;
+    transition: 350ms;
+
+}
+
+#sideBarBodyClosed {
+    left: -100%;
+    width: 100%;
+    background: #FF8484;
+    height: 100vh;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+    position: fixed;
+    border: solid 2px;
+    transition: 850ms;
+
+}
+
+.sideBarList{
+    list-style-type: none;
+
+}
+
+.sideBarButton{
+    margin: 1em;
+    display: flex;
+
+}
+
+button {
+    background: #FFBCBC;
+    width: 65%;
+    height: 3em;
+    margin: 1em;
+    button-radius: 12px;
+    display: flex;
+    transition-duration: 0.4s;
+
+}
+
+button:hover {
+    background-color: #FFACAC; /* Green */
+    /*color: white;*/
+  }
+
+#sideBarHeader {
+    text-shadow: 1px 1px 1px red;
+    font-size: 24pt;
+    display: flex;
+}
+
+.overdueTaskCounter {
+    /*color: white;*/
+    position: relative;
+    top: 50px;
+    font-size: 18pt;
+    background: #FF5C5C;
+    width: 80%;
+    margin: auto;
+    border: solid 2px;
+    display: flex;
+}

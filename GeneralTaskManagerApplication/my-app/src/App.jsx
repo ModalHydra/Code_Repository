@@ -36,12 +36,13 @@ function App() {
     <>
     <BrowserRouter>
       <Routes>
-        <Route path = "/" element = {<TicTacToe/>}/>
+        <Route path = "/" element = {<TaskManagerHome/>}/>
         <Route path = "/Home" element = {<TaskManagerHome/>}/>
         <Route path = "/About" element = {<TaskManagerAbout/>}/>
         <Route path = "/Calendar" element = {<TaskManagerCalendar/>}/>
         <Route path = "/Editor" element = {<TaskManagerEditor/>}/>
         <Route path = "/Overdue" element = {<TaskManagerOverdue/>}/>
+        <Route path = "/Games/TicTacToe" element = {<TicTacToe/>}/>
       </Routes>    
     </BrowserRouter>
     </>

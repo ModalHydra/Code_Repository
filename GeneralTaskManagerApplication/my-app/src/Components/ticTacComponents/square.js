@@ -1,7 +1,7 @@
-export default function Square(){
-    return(
-        <h>I am a square</h>
 
-    );
+export default function Square({value, onSquareClicked}) {
+
+
+  return <button className="square" onClick={onSquareClicked}>{value}</button>;
 }
 

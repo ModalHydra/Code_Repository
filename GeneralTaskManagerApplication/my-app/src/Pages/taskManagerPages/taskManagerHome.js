@@ -26,13 +26,13 @@ export default function TaskManagerHomer(){
                     }
 
                     #taskList{
-                        width: 1000pt;
+                        width: 100%;
                         
                     }
 
                     li.task{
                         margin: 5px;
-                        width: 1000pt;
+                        width: 100%;
                     }
                 
                 

@@ -1,4 +1,5 @@
 import SideBar from "../../Components/taskManagerComponents/SideBar";
+import TaskList from "../../Components/taskManagerComponents/TaskList";
 //import Cookies from 'js-cookie';
 
 export default function TaskManagerOverdue(){
@@ -21,10 +22,9 @@ export default function TaskManagerOverdue(){
             </style>
            
              
-             <SideBar/>
-             <h1 id = "overdueTitle">
-                    Overdue
-             </h1>
+            <SideBar/>
+             <TaskList/>
+
              
         </div>
     );
