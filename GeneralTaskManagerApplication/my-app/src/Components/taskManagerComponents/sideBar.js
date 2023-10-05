@@ -52,10 +52,12 @@ export default function SideBar(){
 
 
     return(
-        <>
-        <button id = "closeSideBarButton" onClick = {() => closeSideBar()} >
-            X
-        </button>
+        <div id = "sideWrapper">
+        <p id = "closeButtonBody">
+            <button id = "closeSideBarButton" onClick = {() => closeSideBar()} >
+                X
+            </button>
+        </p>
 
         <div id = {active ? "sideBarBody" : "sideBarBodyClosed"}>
             
@@ -98,7 +100,7 @@ export default function SideBar(){
         
         
         
-        </>
+        </div>
         
     );
 }

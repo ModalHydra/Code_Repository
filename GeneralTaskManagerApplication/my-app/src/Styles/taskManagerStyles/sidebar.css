@@ -1,3 +1,24 @@
+
+#sideWrapper{
+    text-align: center;
+}
+
+#closeButtonBody {
+    background-color: #FF8484;
+    border: solid 2px;
+    width: 15%;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+    position: fixed;
+    left: 0;
+    
+}
+
+
+
+
+
 #sideBarBody {
     background: #FF8484;
     width: 15%;
@@ -8,12 +29,14 @@
     position: fixed;
     border: solid 2px;
     left: 0;
+    top: 5vh;
     transition: 350ms;
 
 }
 
 #sideBarBodyClosed {
     left: -100%;
+    top: 5vh;
     width: 100%;
     background: #FF8484;
     height: 100vh;
@@ -24,6 +47,7 @@
     border: solid 2px;
     transition: 850ms;
 
+    
 }
 
 .sideBarList{
@@ -34,6 +58,7 @@
 .sideBarButton{
     margin: 1em;
     display: flex;
+    text-align: center;
 
 }
 
@@ -44,7 +69,9 @@ button {
     margin: 1em;
     button-radius: 12px;
     display: flex;
+    text-align: center;
     transition-duration: 0.4s;
+    padding: 0px;
 
 }
 

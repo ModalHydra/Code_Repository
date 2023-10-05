@@ -21,9 +21,10 @@ export default function TaskManagerOverdue(){
                 `}
             </style>
            
-             
-            <SideBar/>
-             <TaskList/>
+             <div>
+                <SideBar/>
+                <TaskList/>
+             </div>
 
              
         </div>
